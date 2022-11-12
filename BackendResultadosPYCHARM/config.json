@@ -1,0 +1,8 @@
+{
+  "url-backend": "127.0.0.1",
+  "port": 9999,
+
+  "data-db-connection": "mongodb+srv://TutoriaDomingo:Danny12345@cluster0.u6kujme.mongodb.net/?retryWrites=true&w=majority",
+  "name-db": "Proyecto_Registraduria"
+
+}
