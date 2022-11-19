@@ -1,7 +1,13 @@
+<<<<<<< HEAD:BackendResultadosPYCHARM/Repositorios/InterfazRepositorio.py
 import json
 from typing import Generic, List, TypeVar, get_args, get_origin
 
 import database.database as dbase
+=======
+#Import libs
+import pymongo
+import certifi
+>>>>>>> 49fd56767be61708ed30faf1fe6a70e60cc61acf:BackendResultadosPYCHARM/Repositorios/InterfaceRepositorio.py
 from bson import DBRef
 from bson.objectid import ObjectId
 
