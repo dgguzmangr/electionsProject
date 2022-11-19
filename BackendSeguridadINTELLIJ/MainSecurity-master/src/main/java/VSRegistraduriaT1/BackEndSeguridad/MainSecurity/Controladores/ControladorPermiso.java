@@ -35,6 +35,7 @@ public class ControladorPermiso {
 
     @PutMapping("{id}")
     public Permiso update(@PathVariable String id, @RequestBody Permiso infoPermiso){
+
         Permiso permisoActual = miRepositorioPermiso.findById(id)
                 .orElse(null);
         if(permisoActual != null){

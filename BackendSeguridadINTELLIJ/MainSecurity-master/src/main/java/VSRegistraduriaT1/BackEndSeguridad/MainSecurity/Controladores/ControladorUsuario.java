@@ -29,6 +29,7 @@ public class ControladorUsuario {
     public List<Usuario> index(){
         return miRepositorioUsuario.findAll();
     }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Usuario create(@RequestBody Usuario infoUsuario){
@@ -36,6 +37,26 @@ public class ControladorUsuario {
         return miRepositorioUsuario.save(infoUsuario);
     }
 
+    /**
+     * Se añade una función para manejar el encriptado de las
+     * contraseñas
+     * */
+
+    public String convertirSHA256(String password){
+        MessageDigest md = null;
+        try{
+            md = MessageDigest.getInstance("SHA-256");
+        }catch (NoSuchAlgorithmException e){
+            e.printStackTrace();
+            return null;
+        }
+        byte[] hash = md.digest(password.getBytes());
+        StringBuffer sb = new StringBuffer();
+        for(byte b: hash){
+            sb.append(String.format("%20x", b));
+        }
+        return sb.toString();
+    }
     @GetMapping("{id}")
     public Usuario show(@PathVariable String id){
         Usuario usuarioActual = miRepositorioUsuario
@@ -75,13 +96,13 @@ public class ControladorUsuario {
     }
 
     /**
-     *
+     *Asigna un rol a un usuario
      * @param id_usuario
      * @param id_rol
      * @return Usuario
      */
     @PutMapping("{id_usuario}/rol/{id_rol}")
-    public Usuario asignarRolAsuario(@PathVariable String id_usuario,
+    public Usuario asignarRolUsuario(@PathVariable String id_usuario,
                                      @PathVariable String id_rol){
         Usuario usuarioActual = miRepositorioUsuario
                 .findById(id_usuario)
@@ -99,10 +120,11 @@ public class ControladorUsuario {
 
     @PostMapping("/validar")
     public Usuario validate(@RequestBody Usuario infoUsuario,
-                            final HttpServletResponse response)throws IOException{
+                            final HttpServletResponse response)
+            throws IOException{
         Usuario usuarioActual = miRepositorioUsuario.getUserByMail(infoUsuario.getCorreo());
         if(usuarioActual!=null && usuarioActual.getContrasena()
-                .equals(convertirSHA256(infoUsuario.getCorreo()))){
+                .equals(convertirSHA256(infoUsuario.getContrasena()))){
             usuarioActual.setContrasena((""));
             return usuarioActual;
         }else{
@@ -110,21 +132,4 @@ public class ControladorUsuario {
             return null;
         }
     }
-
-    public String convertirSHA256(String password){
-        MessageDigest md = null;
-        try{
-            md = MessageDigest.getInstance("SHA-256");
-        }catch (NoSuchAlgorithmException e){
-            e.printStackTrace();
-            return null;
-        }
-        byte[] hash = md.digest(password.getBytes());
-        StringBuffer sb = new StringBuffer();
-        for(byte b: hash){
-            sb.append(String.format("%20x", b));
-        }
-        return sb.toString();
-    }
-
 }
